@@ -82,7 +82,7 @@ app.post("/signin", async (req, res) => {
   if (user) {
     console.log(user);
     if (bcrypt.compareSync(password, user.password)) {
-      const token = await jwt.sign(user, SECRET);
+      const token = await jwt.sign(user, SECRET, { expiresIn: '1h' });
       req.session.auth = token;
       res.redirect("/dashboard");
     } else {
@@ -112,6 +112,9 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
+app.get("/", (req, res) => {
+  res.render("register");
+});
 //rendering the dashboard
 app.get("/dashboard", auth, (req, res) => {
   if (req.headers["content-type"] !== "application/json") {
